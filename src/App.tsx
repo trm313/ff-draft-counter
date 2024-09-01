@@ -11,9 +11,45 @@ import PositionCounter from './components/PositionCounter';
 
 const defaultDraftId = '1135772916597456896'
 
+interface DraftDetails {
+  draft_id: string;
+  settings: DraftSettings;
+  status: string;
+  metadata: DraftMetadata;
+}
+interface DraftSettings {
+  rounds: number;
+  teams: number;
+}
+interface DraftMetadata {
+  league_id: string;
+  name: string;
+  scoring_type: string;
+  type: string;
+}
+
+interface DraftPick {
+  draft_id: string;
+  draft_slot: number;
+  is_keeper: null | boolean;
+  pick_no: number;
+  picked_by: string;
+  player_id: string;
+  roster_id: null | string;
+  round: number;
+  metadata: DraftPickMetadata;
+}
+interface DraftPickMetadata {
+  first_name: string;
+  last_name: string;
+  injury_status: string;
+  position: string;
+  team: string;
+}
+
 function App() {
   // STATE
-  const [draftPicks, setDraftPicks] = useState([]);
+  const [draftPicks, setDraftPicks] = useState<DraftPick[]>([]);
   const [currentPick, setCurrentPick] = useState<number>(0);
   const [loading, setLoading] = useState(false);
   const [isPolling, setIsPolling] = useState(false);
@@ -22,7 +58,7 @@ function App() {
    * 1130718283352748032 - few weeks ago
    * 1135772916597456896 - sat 8:51
    */
-  const [draftDetails, setDraftDetails] = useState(null);
+  const [draftDetails, setDraftDetails] = useState<DraftDetails | null>(null);
 
   const pollingInterval: MutableRefObject<null | NodeJS.Timeout> = useRef(null);
 
@@ -30,7 +66,8 @@ function App() {
   const updateDraftData = async () => {
     setLoading(true);
     try {
-      const draftPicksData = await fetchDraftPicks(draftId);
+      const response = await fetchDraftPicks(draftId);
+      const draftPicksData = response as DraftPick[]
 
       // Check if the new data is different from the current state
       if (
@@ -51,8 +88,11 @@ function App() {
   const loadDraft = async () => {
     setLoading(true);
     try {
-      const draftData = await fetchDraftDetails(draftId);
-      if (draftData) setDraftDetails(draftData);
+      const response = await fetchDraftDetails(draftId);
+      if (response) {
+        const draftData = response as DraftDetails
+        setDraftDetails(draftData);
+      }
 
       await updateDraftData();
     } catch (error) {
@@ -115,6 +155,7 @@ function App() {
     };
   }, []); // Empty dependency array means this runs only on unmount
 
+
   return (
     <main className="h-screen w-screen">
       <div className="hero bg-base-200 py-12">
@@ -138,7 +179,7 @@ function App() {
               />
 
               <div className="label">
-                <span className="label-text-alt">{`https://sleeper.com/draftboards/<this_part>`}</span>
+                <span className="label-text-alt">https://sleeper.com/draftboards/<span className='bg-success'>{`{{draft_id}`}</span></span>
               </div>
             </label>
             <button className="btn btn-primary" onClick={loadDraft}>
