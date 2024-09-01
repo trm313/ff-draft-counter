@@ -9,13 +9,15 @@ import { fetchDraftDetails, fetchDraftPicks } from './utils/Sleeper';
 import DraftPick from './components/DraftPick';
 import PositionCounter from './components/PositionCounter';
 
+const defaultDraftId = '1135772916597456896'
+
 function App() {
   // STATE
   const [draftPicks, setDraftPicks] = useState([]);
   const [currentPick, setCurrentPick] = useState<number>(0);
   const [loading, setLoading] = useState(false);
   const [isPolling, setIsPolling] = useState(false);
-  const [draftId, setDraftId] = useState('1135772916597456896');
+  const [draftId, setDraftId] = useState('');
   /**
    * 1130718283352748032 - few weeks ago
    * 1135772916597456896 - sat 8:51
@@ -83,6 +85,29 @@ function App() {
   };
 
   // EFFECTS
+  
+  // Parse draftId from URL on initial load
+  useEffect(() => {
+    const queryParams = new URLSearchParams(window.location.search);
+    const urlDraftId = queryParams.get('draftId');
+    if (urlDraftId) {
+      setDraftId(urlDraftId);
+    } else {
+      setDraftId(defaultDraftId)
+    }
+  }, []);
+
+  // Update the URL whenever draftId changes
+  useEffect(() => {
+    if (draftId) {
+      const queryParams = new URLSearchParams(window.location.search);
+      queryParams.set('draftId', draftId);
+      const newUrl = `${window.location.pathname}?${queryParams.toString()}`;
+      window.history.replaceState(null, '', newUrl);
+    }
+  }, [draftId]);
+
+
   // Cleanup effect to stop polling when the component unmounts
   useEffect(() => {
     return () => {
