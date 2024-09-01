@@ -70,7 +70,7 @@ function App() {
 
   const startPolling = () => {
     setIsPolling(true); // Set isPolling to true first
-    pollingInterval.current = setInterval(updateDraftData, 5000); // Start polling
+    pollingInterval.current = setInterval(updateDraftData, 15000); // Start polling
     updateDraftData(); // Load data immediately
   };
 
