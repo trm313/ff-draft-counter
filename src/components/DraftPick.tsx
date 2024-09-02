@@ -1,3 +1,4 @@
+import { DraftPick as DraftPickType } from '../App'
 const badgeStyles: any = {
   QB: 'error',
   WR: 'success',
@@ -17,14 +18,14 @@ export default function DraftPick({
   positionNumber,
   position,
 }: {
-  pick: any;
+  pick: DraftPickType;
   currentPick: number;
   position: string;
   positionNumber: number;
 }) {
   return (
     <div className="relative">
-      <button className='hidden btn-error btn-info btn-success btn-warning btn-primary btn-default' /> {/* A hidden button that includes the styles which I'm programatically referencing or else the class styles don't get loaded */}
+      <button className='hidden btn-error btn-info btn-success btn-warning btn-primary btn-default' /> {/* A hidden button that includes the styles which I'm programatically referencing or else the class styles don't get loaded  */}
       <div className="flex items-center my-1">
         <div className="w-12 text-center">
           <span className="text-lg font-bold">{pick.pick_no}</span>

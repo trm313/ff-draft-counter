@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, MutableRefObject } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   formatPick,
   currentPickNumber,
@@ -8,7 +8,6 @@ import {
 import { fetchDraftDetails, fetchDraftPicks } from './utils/Sleeper';
 import DraftPick from './components/DraftPick';
 import PositionCounter from './components/PositionCounter';
-import Footer from './components/Footer';
 
 const defaultDraftId = '1135772916597456896'
 
@@ -29,7 +28,7 @@ interface DraftMetadata {
   type: string;
 }
 
-interface DraftPick {
+export interface DraftPick {
   draft_id: string;
   draft_slot: number;
   is_keeper: null | boolean;
@@ -61,7 +60,7 @@ function App() {
    */
   const [draftDetails, setDraftDetails] = useState<DraftDetails | null>(null);
 
-  const pollingInterval: MutableRefObject<null | NodeJS.Timeout> = useRef(null);
+  const pollingInterval: any = useRef(null);
 
   // FUNCTIONS
   const updateDraftData = async () => {
@@ -253,7 +252,6 @@ function App() {
           )}
         </div>
       </main>
-      <Footer />
     </main>
   );
 }
