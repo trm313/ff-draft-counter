@@ -8,6 +8,7 @@ import {
 import { fetchDraftDetails, fetchDraftPicks } from './utils/Sleeper';
 import DraftPick from './components/DraftPick';
 import PositionCounter from './components/PositionCounter';
+import Footer from './components/Footer';
 
 const defaultDraftId = '1135772916597456896'
 
@@ -252,6 +253,7 @@ function App() {
           )}
         </div>
       </main>
+      <Footer />
     </main>
   );
 }
